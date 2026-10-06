@@ -1,11 +1,23 @@
 {
   "manifest_version": 3,
   "name": "Blackboard File Saver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Save original PDFs and documents referenced by Blackboard previews you can already open.",
   "minimum_chrome_version": "109",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "blackboard-file-saver@yassine-abid.github.io",
+      "strict_min_version": "128.0",
+      "data_collection_permissions": {"required": ["none"]}
+    }
+  },
   "permissions": ["activeTab", "scripting", "webNavigation", "downloads"],
   "host_permissions": ["https://*.blackboard.com/*"],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {"default": "Alt+Shift+D", "mac": "Alt+Shift+D"}
+    }
+  },
   "action": {
     "default_title": "Save Blackboard files",
     "default_popup": "popup.html",

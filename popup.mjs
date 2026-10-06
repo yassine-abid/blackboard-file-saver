@@ -1,7 +1,7 @@
 import { isBlackboardURL } from "./core.mjs";
 import { scanTab, startDownload } from "./browser-api.mjs";
 
-const api = globalThis.chrome;
+const api = globalThis.browser || globalThis.chrome;
 const count = document.querySelector("#count");
 const status = document.querySelector("#status");
 const filesList = document.querySelector("#files");

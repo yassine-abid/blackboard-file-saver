@@ -1,8 +1,8 @@
 # Blackboard File Saver
 
-A Chrome / Microsoft Edge extension that saves original documents referenced by Blackboard previews you can already open. No Python, copied viewer URLs, or external service required.
+An extension for desktop Chrome, Microsoft Edge, Firefox, and Zen that saves original documents referenced by Blackboard previews you can already open. No Python, copied viewer URLs, or external service required.
 
-## Install
+## Install in Chrome or Edge
 
 1. Download this repository as a ZIP and extract it.
 2. Open `chrome://extensions` or `edge://extensions`.
@@ -11,14 +11,27 @@ A Chrome / Microsoft Edge extension that saves original documents referenced by 
 
 Keep the extracted folder in a permanent location. This is an unpacked extension, not a Chrome Web Store listing.
 
+## Install in Zen or Firefox
+
+1. Download the latest release ZIP and extract it.
+2. Open `about:debugging` in Zen or Firefox.
+3. Choose **This Zen** or **This Firefox**, then **Load Temporary Add-on**.
+4. Select `manifest.json` in the extracted extension folder.
+
+The unsigned add-on remains installed until the browser restarts. Reload it using the same steps after a restart. Permanent installation requires a Mozilla-signed package; this release is not signed. [Mozilla's temporary installation guide](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) explains the process.
+
+Firefox requires version 128 or newer. Zen installation and document downloading were confirmed working by the user. Firefox uses the same supported API path but has not been separately tested in a Firefox installation. Chrome/Edge still need an installed-browser smoke test.
+
 ## Use
 
-1. Sign in to Blackboard in Chrome or Edge.
+1. Sign in to Blackboard in a supported browser.
 2. Expand a course attachment’s preview and wait for its pages to load.
 3. Click the extension icon, then **Download file** beside the document.
 4. Choose a destination in the Save As dialog. Check your browser’s downloads for completion.
 
 Choose **Refresh** after opening another preview. If a link expires, reopen the preview and refresh.
+
+The default popup shortcut is **Alt+Shift+D** (**Option+Shift+D** on macOS). A conflicting browser or extension shortcut can prevent it from activating; the toolbar icon remains available.
 
 ## Supported files
 
@@ -26,7 +39,7 @@ Choose **Refresh** after opening another preview. If a link expires, reopen the 
 - Original Office documents when the viewer exposes their original file.
 - Direct hosted Blackboard document links.
 
-Works across courses on HTTPS sites ending in `blackboard.com`. It scans the current tab’s loaded previews; it does not crawl courses or expand attachments. Image-only viewers, videos, SCORM packages, custom non-Blackboard domains, Safari, and Codex’s in-app browser are outside this version’s scope.
+Works across courses on HTTPS sites ending in `blackboard.com`. It scans the current tab's loaded previews; it does not crawl courses or expand attachments. Image-only viewers, videos, SCORM packages, custom non-Blackboard domains, mobile browsers, Safari, and Codex's in-app browser are outside this version's scope.
 
 ## Privacy and permissions
 
