@@ -15,6 +15,7 @@ button:disabled { cursor: default; opacity: .65; }
 .secondary { background: transparent; border: 1px solid #c7d5cf; border-radius: 7px; padding: 6px 10px; font-size: 12px; color: #28554f; }
 #status { margin: 12px 0; font-size: 12px; line-height: 1.5; color: #58716a; }
 #status[data-error="true"] { color: #9a391f; }
+#access-detail { font-size: 11px; line-height: 1.5; color: #87614e; overflow-wrap: anywhere; }
 #files { list-style: none; padding: 0; margin: 15px 0 0; display: grid; gap: 10px; max-height: 360px; overflow-y: auto; }
 .file { border: 1px solid #d9e3dc; background: #fff; border-radius: 10px; padding: 13px; }
 .file-top { display: flex; gap: 11px; align-items: flex-start; }

@@ -30,5 +30,5 @@ test("refuses an unrelated download address before calling the browser",async()=
 });
 test("returns an empty list when there are no permitted frames",async()=>{
   const api={webNavigation:{async getAllFrames(){return undefined;}},scripting:{executeScript(){throw new Error("must not call");}}};
-  assert.deepEqual(await scanTab(api,1),{files:[],inaccessibleFrames:0});
+  assert.deepEqual(await scanTab(api,1),{files:[],inaccessibleFrames:0,blockedFrames:[]});
 });

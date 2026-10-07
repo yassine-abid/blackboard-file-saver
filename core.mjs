@@ -18,6 +18,25 @@ export function isBlackboardURL(value) {
   } catch { return false; }
 }
 
+export function isAWSAcademyURL(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password && (url.hostname === "awsacademy.instructure.com" || url.hostname === "emergingtalent.contentcontroller.com" || url.hostname === "awsacademy.contentcontroller.com");
+  } catch { return false; }
+}
+
+export function isSupportedPageURL(value) {
+  return isBlackboardURL(value) || isAWSAcademyURL(value);
+}
+
+export function isAllowedDownloadURL(value) {
+  if (isSupportedPageURL(value)) return true;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password && (url.hostname.endsWith(".cloudfront.net") || url.hostname.endsWith(".amazonaws.com"));
+  } catch { return false; }
+}
+
 function decodeFilename(value) {
   try { return decodeURIComponent(value); } catch { return value; }
 }
@@ -61,7 +80,23 @@ function candidateFile(source, label, format, fromViewer) {
   return { url: source, filename, type: filename.split(".").pop().toUpperCase(), variant: format === "pdf" ? "PDF preview file" : "Original document" };
 }
 
+function awsPDF(candidate) {
+  if (!isAWSAcademyURL(candidate.contextURL || candidate.url) || !isAllowedDownloadURL(candidate.url)) return null;
+  const url = new URL(candidate.url);
+  const pdf = /\.pdf$/i.test(url.pathname) || url.searchParams.get("response-content-type")?.toLowerCase() === "application/pdf";
+  if (!pdf) return null;
+  // External AWS storage is accepted only when the supported course frame
+  // already loaded it. Citation links alone do not authorize external hosts.
+  if (!isAWSAcademyURL(candidate.url) && candidate.kind !== "resource" && candidate.kind !== "captured") return null;
+  const name = filenameFromURL(candidate.url);
+  const filename = safeFilename(/\.pdf$/i.test(name) ? name : `${candidate.label || "AWS-Academy-Student-Guide"}.pdf`);
+  const captured=candidate.kind==="captured";
+  return {url:candidate.url,filename,type:"PDF",variant:captured ? "Original PDF captured — ready to save" : "Original AWS Academy PDF",provider:"aws",captured};
+}
+
 export function filesFromCandidate(candidate) {
+  const aws = candidate && awsPDF(candidate);
+  if (aws) return [aws];
   if (!isBlackboardURL(candidate?.url)) return [];
   const url = new URL(candidate.url);
   const viewerHost = /(^|\.)basic-doc-viewer\./i.test(url.hostname);
@@ -87,7 +122,7 @@ export function mergeCandidates(candidates) {
   const files = new Map();
   for (const candidate of candidates) {
     for (const file of filesFromCandidate(candidate)) {
-      if (!files.has(file.url)) files.set(file.url, file);
+      if (!files.has(file.url) || (file.captured && !files.get(file.url).captured)) files.set(file.url, file);
     }
   }
   return [...files.values()];

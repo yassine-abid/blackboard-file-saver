@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Blackboard File Saver",
-  "version": "1.0.1",
-  "description": "Save original PDFs and documents referenced by Blackboard previews you can already open.",
-  "minimum_chrome_version": "109",
+  "name": "Course File Saver",
+  "version": "1.1.7",
+  "description": "Save original documents from accessible Blackboard previews and AWS Academy Student Guides.",
+  "minimum_chrome_version": "121",
   "browser_specific_settings": {
     "gecko": {
       "id": "blackboard-file-saver@yassine-abid.github.io",
@@ -12,14 +12,27 @@
     }
   },
   "permissions": ["activeTab", "scripting", "webNavigation", "downloads"],
-  "host_permissions": ["https://*.blackboard.com/*"],
+  "background": {"scripts":["background.js"],"service_worker":"background.js"},
+  "host_permissions": ["https://*.blackboard.com/*", "https://awsacademy.instructure.com/*", "https://emergingtalent.contentcontroller.com/*", "https://awsacademy.contentcontroller.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://awsacademy.instructure.com/*", "https://emergingtalent.contentcontroller.com/*", "https://awsacademy.contentcontroller.com/*"],
+      "js": ["capture-bridge.js"], "run_at": "document_start", "all_frames": true,
+      "match_about_blank": true, "match_origin_as_fallback": true, "world": "ISOLATED"
+    },
+    {
+      "matches": ["https://awsacademy.instructure.com/*", "https://emergingtalent.contentcontroller.com/*", "https://awsacademy.contentcontroller.com/*"],
+      "js": ["capture-main.js"], "run_at": "document_start", "all_frames": true,
+      "match_about_blank": true, "match_origin_as_fallback": true, "world": "MAIN"
+    }
+  ],
   "commands": {
     "_execute_action": {
       "suggested_key": {"default": "Alt+Shift+D", "mac": "Alt+Shift+D"}
     }
   },
   "action": {
-    "default_title": "Save Blackboard files",
+    "default_title": "Save course files",
     "default_popup": "popup.html",
     "default_icon": {"16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png"}
   },
