@@ -2,6 +2,8 @@
 
 An extension for desktop Chrome, Microsoft Edge, Firefox, and Zen that saves original documents referenced by Blackboard previews and AWS Academy Student Guides you can already open. No Python, copied viewer URLs, or external service required.
 
+[Download the latest release](https://github.com/yassine-abid/course-file-saver/releases/latest).
+
 ## Install in Chrome or Edge
 
 1. Download this repository as a ZIP and extract it.
@@ -62,25 +64,33 @@ After you choose an AWS file, the background script copies the selected PDF’s 
 | `activeTab` | Identify the tab where the extension was opened. |
 | `scripting` | Read file references in the loaded frames. |
 | `webNavigation` | Discover the current tab’s preview frames. |
-| `downloads` | Start the selected download with Save As. |
+| `downloads` | Save the selected file to your browser’s download manager. |
 | Blackboard and AWS Academy site access | Inspect course pages and their supported guide/preview frames. |
 
 It uses existing account access and does not change course settings or retrieve unavailable documents.
 
+## Project structure
+
+```text
+course-file-saver/
+├── manifest.json       Browser entry point; must remain at the root
+├── README.md
+├── icons/              Toolbar icons
+├── popup/              Popup HTML, styles, and UI logic
+├── scripts/            Scanning, PDF capture, transfer, and background code
+└── tools/              Background build script
+```
+
+The release ZIP uses this same structure. Tests and development experiments are excluded from the public repository and install package.
+
 ## Development
 
-There are no runtime dependencies. The shipped background.js bundle registers its browser listeners synchronously. After editing its source modules, rebuild it before reloading the extension:
+There are no runtime dependencies. The shipped scripts/background.js bundle registers its browser listeners synchronously. After editing its source modules, rebuild it before reloading the extension:
 
 ```sh
-node build-background.mjs
+node tools/build-background.mjs
 ```
 
-Run tests with Node.js 20 or newer:
-
-```sh
-node --test tests/*.test.mjs
-```
-
-The 56 tests cover URL decoding, document detection, permissions, frame failures, unchanged request forwarding, PDF response capture, out-of-order byte-range assembly, binary integrity, rejection of login/partial responses, and direct background downloading without helper tabs. Live Blackboard extraction and saving were verified. AWS capture and saving were verified in Zen with the complete 59-page Module 3 guide. Direct background downloading without a helper tab or Save As dialog was verified in Zen with the complete 19-page Module 1 guide and 47-page Module 2 guide. The Module 2 download also completed after closing the popup. Chrome/Edge still need an installed-browser smoke test. This version requires Chrome/Edge 121+ or Firefox/Zen based on Firefox 128+.
+The release passed 56 automated checks covering URL decoding, document detection, permissions, frame failures, unchanged request forwarding, PDF response capture, out-of-order byte-range assembly, binary integrity, rejection of login/partial responses, and direct background downloading without helper tabs. Live Blackboard extraction and saving were verified. AWS capture and saving were verified in Zen with the complete 59-page Module 3 guide. Direct background downloading without a helper tab or Save As dialog was verified in Zen with the complete 19-page Module 1 guide and 47-page Module 2 guide. The Module 2 download also completed after closing the popup. Chrome/Edge still need an installed-browser smoke test. This version requires Chrome/Edge 121+ or Firefox/Zen based on Firefox 128+.
 
 Browser APIs: [script injection](https://developer.chrome.com/docs/extensions/reference/api/scripting), [frame discovery](https://developer.chrome.com/docs/extensions/reference/api/webNavigation), and [downloads](https://developer.chrome.com/docs/extensions/reference/api/downloads).

@@ -3,7 +3,7 @@
 (() => {
   if (window.__courseFileSaverCaptureInstalled) return;
   window.__courseFileSaverCaptureInstalled = true;
-  window.__courseFileSaverCaptureVersion = "1.1.7";
+  window.__courseFileSaverCaptureVersion = "1.1.8";
   let nonce;
   const pending = [];
   function send(packet) {

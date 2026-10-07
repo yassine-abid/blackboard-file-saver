@@ -1,5 +1,5 @@
-import { isSupportedPageURL, isAWSAcademyURL } from "./core.mjs";
-import { scanTab, startDownload, missingAWSAccess, AWS_GUIDE_ORIGINS } from "./browser-api.mjs";
+import { isSupportedPageURL, isAWSAcademyURL } from "../scripts/core.mjs";
+import { scanTab, startDownload, missingAWSAccess, AWS_GUIDE_ORIGINS } from "../scripts/browser-api.mjs";
 
 const api = globalThis.browser || globalThis.chrome;
 const count = document.querySelector("#count");
